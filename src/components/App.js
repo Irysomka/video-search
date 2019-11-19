@@ -1,10 +1,16 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import SearchBar from "./SearchBar";
 import VideoList from "./VideoList";
+import VideoDetail from "./VideoDetail";
 import youtube from "../apis/youtube";
 
 const App = () => {
   const [videos, setVideos] = useState([]);
+  const [selectedVideo, setSelectedVideo] = useState(null);
+
+  useEffect(() => {
+    onFormSubmit("furby");
+  }, []);
 
   const onFormSubmit = async term => {
     const response = await youtube.get("/search", {
@@ -14,12 +20,19 @@ const App = () => {
     });
 
     setVideos(response.data.items);
-    console.log(videos);
+    setSelectedVideo(response.data.items[0]);
   };
+
+  const onVideoSelect = video => {
+    setSelectedVideo(video);
+    console.log(video.snippet.title);
+  };
+
   return (
     <div className="ui container">
       <SearchBar onFormSubmit={onFormSubmit}></SearchBar>
-      <VideoList videos={videos}> </VideoList>
+      <VideoDetail video={selectedVideo} />
+      <VideoList videos={videos} onVideoSelect={onVideoSelect}></VideoList>
     </div>
   );
 };

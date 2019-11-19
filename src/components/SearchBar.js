@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 
 const SearchBar = props => {
-  const [term, setTerm] = useState("cats");
+  const [term, setTerm] = useState("furby");
 
   const onFormSubmit = event => {
     event.preventDefault();
